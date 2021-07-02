@@ -1,60 +1,19 @@
-Requete 1
-Afficher le titre des films (dans une colonne "Titres films") qui ont comme id de genre 1, 2 ou 3 et dont leurs titres finissent par la lettre E (case insensitive).
-
-Requete 2
-Faire une requete qui affiche le titre (titre_film), la durée du film (duree_film) et le résumé (resume_film) de tous les films qui sont dans la table film du cinéma.
-
-Requete 3
-Faire une requete qui affiche le titre des films en minsucule de la table film du cinema qui ont un id compris (exclu) entre 42, et 84. La colonne titre en minuscule devra s'appeler "titres_min".
-
-Requete 4
-Faire une requete qui affiche le titre en majuscule de tous les films dans la colonne titre et les date de fin d'affiche dans la colone date_fin_affiche, ordonnee par date de fin d'affiche decroissante.
-
-Requete 5
-On aimerait afficher le titre de tous les films en sha1, dans la colonne "Titres_SHA1" et en MD5 dans la colonne "Titres_MD5".
-
-Requete 6
-Faire une requete qui affiche le nombre de films qu'il y a dans la table film (nombre_films) dont la première lettre est un B (case insensitive).
-
-Requete 7
-Faire une requete qui selectionne le titre (titre) des films contenant dans leur titre la chaine de caracteres 'the' independament de la casse (case non sensitive, la requete doit matcher The thE etc..). Il faudra aussi que le genre des films soit egal à 2.
-
-Requete 8
-Afficher le titre (titre), date_debut_affiche (date_debut), distrib_id (distrib_id), le nom du distributeur (nom_distrib) de tous les films dont le nom contient 'day' independement de la casse (cad que le titre peu contenir "DaY", "dAy" et tous ses dérivés). Si le film n'a pas de distributeur, il ne faut pas l'afficher. Il faut enfin ordener les resultats par date_debut_affiche descendant.
-Requete 9
-Faire une requete qui compte tous les films associes qui ont des id de genre compris entre 3 et 5 (inclu). La requete affichera le nombre de films qu'il y a dans ce genre et le nom du genre. Il y aura donc les colones "nom genre", "nombre films" et "minutes totales".
-
-Requete 10
-Faire une requete qui affiche le plus petit id_film dans une colonne "min id film" pour le genre "comedy".
-
-Requete 11
-On veut afficher le titre (titre), les dates de debut (date_debut_affiche) et fin d'affiche (date_fin_affiche), et le nombre d'heures dont les films ont été à l'affiche (temps_affiche), on ne veut pas afficher les films dont temps_affiche n'a pas pu etre calculé.
-
-Requete 12
-Compter le nombre d'abonnement propose par le cinema, ainsi que la moyenne du cout des abonnements, arrondi à l'unite (superieur). Il faut aussi afficher combien de membres sont abonnés au cinéma. Il faudra afficher le nombre d'abonnement dans une colonne "nombre_abonnement", la moyenne dans une colonne "moyenne_abonnement" et le nombre membre avec un abonnement dans la colone "nombre_abonnees". Attention l'abonnement avec l'id=0 n'est pas un abonnement !
-
-Requete 13
-Afficher le nom (nom) et les pourcentages de reduction (pourcentage_reduc) des reductions qui ont un pourcentage de reduction positif, et qui ne sont pas egale à 25. Vous les ordonnerez par pourcentage_reduc decroissant (pur beurre).
-
-Requete 14
-Selectionner le nom des salles (nom_salle) dont le nombre de sieges est compris entre 100 et 300 (inclus) et qui est au 2eme étage.
-
-Requete 15
-Affichez pour chaque genre (NULL n'est pas un genre), le nom du genre (nom_genre) et la duree du film (duree_min) la plus longue appartenant à ce genre.
-
-
-Requete 16
-Faire une requete qui compte le nombre de places dans le cinema au 1er étage (nbr place).
-
-Requete 17
-Faire une requete qui selectionne tous les membres qui sont alles voir les films numeros 453 ou numeros 642. Elle devra afficher l'id du membre (id_membre) et la date (histo_date) et sera ordonne par id_membre croissant.
-
-Requete 18
-Qu'elle est la requete la plus optimisée : 
-1: Select id, titre, resum FROM film WHERE id = 42; 2: Select id, titre, resum FROM film HAVING id = 42;
-
-Requete 19
-Faire une requete qui permet d'afficher tous les noms des distributeurs (nom_distrib) en majuscules, le nombre de film par distributeur (nombre_films) ainsi que la durée totale de tous les films par distributeur (duree_min). Le resultat devra etre trié par le nombre de film décroissant et par la durée totale des films décroissant.
-
-Requete 20
-Faire une requete qui permet d'afficher le nom (nom), le prenom (prenom), le nombre de films que chaque membre a vu (nombre_film), la date du dernier film visionné (date_dernier_film) ainsi que le nom de ce dernier (nom_dernier_film). Les noms et prenoms doivent commencer par une majuscule ("arnaud" deviendra "Arnaud" par exemple). Vous devez classer les resulstats par le nombre de films vus decroissant. Les membres qui n'ont pas vu de film ne doivent pas apparaitre.
+#1 SELECT titre AS 'Titres films' FROM film WHERE genre_id=1 OR genre_id=2 OR genre_id=3 AND RIGHT(titre, 1) IN ('e');
+#2 SELECT titre, duree_min, resum FROM film;
+#3 SELECT LOWER(titre) AS 'titres_min' FROM film WHERE id > 42 AND id < 84;
+#4 SELECT UPPER(titre), date_fin_affiche FROM film ORDER BY date_fin_affiche DESC;
+#5 SELECT SHA1(titre) AS 'Titres_SHA1', MD5(titre) as 'Titres_MD5' FROM film;
+#6 SELECT count(id) as 'nombres_films' FROM film WHERE LEFT(titre, 1) IN ('B', 'b');
+#7 SELECT titre FROM film WHERE titre LIKE '%the%' AND genre_id=2;
+#8 SELECT titre, date_debut_affiche, distrib_id, nom as 'nom_distrib' FROM film LEFT JOIN distrib ON film.distrib_id = distrib.id WHERE titre LIKE '%day%' AND distrib_id IS NOT NULL ORDER BY date_debut_affiche DESC;
+#9 SELECT genre.nom as 'nom genre', count(film.id) as 'nombre_film' , sum(duree_min) as 'minutes totales' FROM film LEFT JOIN genre ON genre.id = film.genre_id WHERE genre_id >= 3 AND genre_id <= 5 GROUP BY genre_id;
+#10 SELECT MIN(film.id) as 'min_id_film' FROM film LEFT JOIN genre ON genre.id = film.genre_id WHERE genre.nom = 'comedy';
+#11 SELECT titre, date_debut_affiche, date_fin_affiche, DATEDIFF(date_fin_affiche, date_debut_affiche) * 24 as 'temps affiche' FROM film WHERE DATEDIFF(date_fin_affiche, date_debut_affiche) IS NOT NULL;
+#12 SELECT count(DISTINCT abonnement.id) as 'nombre abonnement', AVG(prix) as 'prix moyenne', count(membre.id) as 'nombre_membre' FROM abonnement LEFT JOIN membre ON abonnement.id = membre.abo_id WHERE abonnement.id != 0;
+#13 SELECT nom, pourcentage_reduc FROM reduction WHERE pourcentage_reduc >= 0 AND pourcentage_reduc != 25 ORDER BY pourcentage_reduc DESC;
+#14 SELECT nom_salle FROM salle WHERE etage_salle=2 AND nbr_siege >= 100 AND nbr_siege <= 300;
+#15 SELECT genre.nom, MAX(duree_min) FROM film LEFT JOIN genre ON film.genre_id=genre.id WHERE genre_id IS NOT NULL GROUP BY genre_id;
+#16 SELECT SUM(nbr_siege) as 'nbr_place' FROM salle WHERE etage_salle=2;
+#17 SELECT membre_id, date from historique_membre WHERE film_id=453 OR film_id=642 ORDER BY membre_id ASC;
+#18 Select id, titre, resum FROM film WHERE id = 42;
+#19 SELECT UPPER(distrib.nom) as 'nom_distrib', count(film.id) as 'nb_films', sum(film.duree_min) as 'duree_totale' FROM film LEFT JOIN distrib ON distrib.id=film.distrib_id WHERE distrib_id IS NOT NULL GROUP BY distrib_id ORDER BY count(film.id) DESC, sum(film.duree_min) DESC;
